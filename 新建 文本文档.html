@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>淘券生活网导航页</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-main: #1f1f1f;
+            --text-sub: #666666;
+            --accent-color: #007bff;
+            --accent-hover: #0056b3;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --card-bg: #1e1e1e;
+                --text-main: #e0e0e0;
+                --text-sub: #aaaaaa;
+                --border-color: #333333;
+                --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background-color 0.3s ease;
+            /* 背景动画 */
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+            background: transparent; 
+        }
+
+        /* 顶部标题栏样式 */
+        .top-header {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 25px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .main-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* 去掉了 .typing-cursor 相关的闪烁样式 */
+
+        .sub-title {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 5px;
+            font-weight: 300;
+        }
+
+        /* 主体卡片容器 */
+        .main-card {
+            flex: 1;
+            background: var(--card-bg);
+            margin: 20px 0; 
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tab 导航样式 */
+        .tabs-header {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--card-bg);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-sub);
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+        }
+
+        .tab-btn:hover {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+            background-color: var(--bg-color);
+        }
+
+        /* 内容区域样式 */
+        .content-area {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 搜索框样式 */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--bg-color);
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .search-btn {
+            padding: 12px 25px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .search-btn:hover { opacity: 0.9; }
+
+        /* 链接网格样式 */
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 15px;
+        }
+
+        .link-card {
+            padding: 20px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--text-main);
+            background: var(--bg-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 1px solid transparent;
+        }
+
+        .link-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: var(--accent-color);
+            background: var(--card-bg);
+        }
+
+        .link-icon { font-size: 1.8rem; margin-bottom: 10px; display: block; }
+        .link-title { font-size: 0.9rem; font-weight: 500; }
+
+        /* 工具列表样式 */
+        .tool-list { display: flex; flex-direction: column; gap: 15px; }
+        .tool-item {
+            display: flex; align-items: center; padding: 15px;
+            background: var(--bg-color); border-radius: 8px;
+            text-decoration: none; color: var(--text-main); transition: 0.2s;
+        }
+        .tool-item:hover { background: var(--border-color); }
+        .tool-icon { font-size: 1.5rem; margin-right: 15px; }
+        .tool-info h4 { margin-bottom: 4px; }
+        .tool-info p { font-size: 0.8rem; color: var(--text-sub); }
+
+        footer {
+            text-align: center; padding: 15px;
+            font-size: 0.8rem; color: var(--text-sub);
+            border-top: 1px solid var(--border-color);
+            background: var(--card-bg);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 顶部标题 -->
+        <header class="top-header">
+            <!-- 去掉了 class="typing-cursor" -->
+            <h1 class="main-title" id="mainTitle"></h1>
+            <p class="sub-title" id="date"></p>
+        </header>
+
+        <!-- 主体卡片 -->
+        <div class="main-card">
+            <!-- Tab 切换按钮 -->
+            <nav class="tabs-header">
+                <button class="tab-btn active" onclick="openTab(event, 'nav')">常用导航</button>
+                <button class="tab-btn" onclick="openTab(event, 'tools')">实用工具</button>
+                <button class="tab-btn" onclick="openTab(event, 'about')">关于本站</button>
+            </nav>
+
+            <div class="content-area">
+                <!-- Tab 1: 导航内容 -->
+                <div id="nav" class="tab-content active">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" class="search-input" placeholder="输入商品关键词搜索优惠..." onkeypress="handleEnter(event)">
+                        <button class="search-btn" onclick="doSearch()">搜索</button>
+                    </div>
+
+                    <div class="link-grid">
+                        <a href="http://www.jdyhg.top" class="link-card"><span class="link-icon">🔍</span><span class="link-title">淘京拼优惠券查询</span></a>
+                        <a href="https://www.bilibili.com" class="link-card"><span class="link-icon">📺</span><span class="link-title">哔哩哔哩</span></a>
+                        <a href="https://www.taobao.com" class="link-card"><span class="link-icon">🛍️</span><span class="link-title">淘宝</span></a>
+                        <a href="https://mail.qq.com" class="link-card"><span class="link-icon">📧</span><span class="link-title">QQ邮箱</span></a>
+                        <a href="https://github.com" class="link-card"><span class="link-icon">💻</span><span class="link-title">GitHub</span></a>
+                        <a href="https://www.zhihu.com" class="link-card"><span class="link-icon">📖</span><span class="link-title">知乎</span></a>
+                    </div>
+                </div>
+
+                <!-- Tab 2: 工具内容 -->
+                <div id="tools" class="tab-content">
+                    <h2 style="margin-bottom: 20px;">日常实用工具</h2>
+                    <div class="tool-list">
+                        <a href="https://fanyi.baidu.com" class="tool-item"><span class="tool-icon">🈶</span><div class="tool-info"><h4>百度翻译</h4><p>多语言在线翻译</p></div></a>
+                        <a href="https://www.aconvert.com/cn/" class="tool-item"><span class="tool-icon">🔄</span><div class="tool-info"><h4>格式转换</h4><p>PDF、图片、文档格式互转</p></div></a>
+                        <a href="https://tinypng.com" class="tool-item"><span class="tool-icon">🖼️</span><div class="tool-info"><h4>图片压缩</h4><p>智能压缩 PNG/JPG 图片</p></div></a>
+                        <a href="https://www.remove.bg/zh" class="tool-item"><span class="tool-icon">✂️</span><div class="tool-info"><h4>一键抠图</h4><p>AI 自动去除图片背景</p></div></a>
+                    </div>
+                </div>
+
+                <!-- Tab 3: 关于内容 -->
+                <div id="about" class="tab-content">
+                    <div style="text-align: center; padding: 40px 0;">
+                        <div style="font-size: 4rem; margin-bottom: 20px;">👋</div>
+                        <h2>关于这个页面</h2>
+                        <p style="color: var(--text-sub); margin-top: 10px; line-height: 1.6;">
+                            这是一个淘券生活网构建的极简导航页。<br>
+                            汇聚全网优惠商品及各种业务。<br>
+                            合作V：18895771845
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <footer>Designed by 苗条俊</footer>
+        </div>
+    </div>
+
+    <script>
+        // 打字机效果
+        const titleText = "淘券生活网导航页";
+        const titleElement = document.getElementById('mainTitle');
+        let charIndex = 0;
+
+        function typeWriter() {
+            if (charIndex < titleText.length) {
+                titleElement.innerHTML += titleText.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 200); 
+            }
+        }
+        
+        // 页面加载完成后开始打字
+        window.onload = typeWriter;
+
+        // Tab 切换逻辑
+        function openTab(evt, tabName) {
+            var tabContents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            var tabBtns = document.getElementsByClassName("tab-btn");
+            for (var i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // 搜索功能
+        function doSearch() {
+            const query = document.getElementById('searchInput').value;
+            if (query) {
+                // 这里默认是百度，你可以改成必应或谷歌
+                window.location.href = 'http://www.jdyhg.top/?cid=FtGx6FGE#/search?keyword=' + encodeURIComponent(query);
+            }
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                doSearch();
+            }
+        }
+
+        // 显示日期
+        const dateElement = document.getElementById('date');
+        const now = new Date();
+        dateElement.textContent = now.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+    </script>
+</body>
+</html>
