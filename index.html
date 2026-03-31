@@ -145,26 +145,37 @@
             background-color: var(--bg-color);
         }
 
-        /* 内容区域样式 */
+        /* 内容区域样式 - 修改为flex布局以确保搜索框始终可见 */
         .content-area {
             flex: 1;
             padding: 30px;
-            overflow-y: auto;
+            display: flex; /* 新增 */
+            flex-direction: column; /* 新增 */
+            overflow: hidden; /* 防止子元素撑开 */
         }
 
-        .tab-content { display: none; animation: fadeIn 0.3s ease; }
-        .tab-content.active { display: block; }
+        .tab-content { 
+            display: none; 
+            animation: fadeIn 0.3s ease; 
+            flex: 1; /* 让tab-content占据全部可用高度 */
+            overflow-y: auto; /* 让内容区域可以滚动 */
+        }
+        .tab-content.active { 
+            display: flex; /* 使用flex布局来管理其子元素 */
+            flex-direction: column;
+        }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 搜索框样式 */
+        /* 搜索框样式 - 添加flex-shrink: 0，使其不被压缩 */
         .search-box {
             display: flex;
             gap: 10px;
             margin-bottom: 30px;
+            flex-shrink: 0; /* 新增：防止该元素在容器空间不足时被压缩 */
         }
 
         .search-input {
@@ -196,15 +207,13 @@
         .search-btn:hover { opacity: 0.9; }
 
         /* 统一的工具/链接项列表样式 - 修改网格以保证最少两列 */
+        .item-grid-container { /* 为item-grid新增一个容器 */
+            flex: 1; /* 占据剩余的所有空间 */
+            overflow-y: auto; /* 当内容过多时，允许自身滚动 */
+            padding-right: 5px; /* 为滚动条留一点空间 */
+        }
         .item-grid {
             display: grid;
-            /* 
-                修改此行：grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-                改为：grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
-                - auto-fit: 将空隙填满，使列宽可以拉伸。
-                - min(220px, 100%): 每列最小宽度为220px，但在极窄屏幕上，100%vw会更小，从而强制至少出现两列。
-                - 1fr: 表示剩余空间平均分配给各列。
-            */
             grid-template-columns: repeat(auto-fit, minmax(min(220px, calc((100% - 15px) / 2)), 1fr));
             gap: 15px;
         }
@@ -247,9 +256,6 @@
             <!-- Tab 切换按钮 (作为一级菜单) - 现在会自动换行 -->
             <nav class="tabs-header">
                 <button class="tab-btn active" onclick="openTab(event, 'nav-shopping')">🛍️ 购物优惠</button>
-                <button class="tab-btn" onclick="openTab(event, 'nav-entertainment')">📺 娱乐视频</button>
-                <button class="tab-btn" onclick="openTab(event, 'nav-dev')">💻 程序员</button>
-                <button class="tab-btn" onclick="openTab(event, 'nav-services')">📧 常用服务</button>
                 <button class="tab-btn" onclick="openTab(event, 'tools')">🧰 实用工具</button>
                 <button class="tab-btn" onclick="openTab(event, 'about')">ℹ️ 关于</button>
             </nav>
@@ -261,179 +267,189 @@
                         <input type="text" id="searchInput" class="search-input" placeholder="输入商品关键词搜索优惠..." onkeypress="handleEnter(event)">
                         <button class="search-btn" onclick="doSearch()">搜索</button>
                     </div>
-
-                    <div class="item-grid">
-                        <a href="https://ycivn.yhzu.cn/" class="item-card">
-                            <img src="https://s1.imagehub.cc/images/2026/03/31/93492a1425bd8381a4b6d106bd04e971.png" alt="淘京拼图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>淘京拼优惠券</h4>
-                                <p>查询全网隐藏优惠券</p>
-                            </div>
-                        </a>
-                        <a href="http://free2h5.lmmyx.com/h5s/blank?promoterId=d5ubs8FvTkSX&itemType=pddWelfare" class="item-card">
-                            <img src="https://s1.imagehub.cc/images/2026/03/31/f3ed381d8878b6a8c6928de6da0c83ea.png" alt="拼多多图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>0元购</h4>
-                                <p>拼多多免费拿好物</p>
-                            </div>
-                        </a>
-                        <a href="https://kzurl15.cn/t3ZYBn" class="item-card">
-                            <img src="https://s1.imagehub.cc/images/2026/03/31/85178c6029722ec30ca79610afefc687.png" alt="外卖图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>外卖霸王餐</h4>
-                                <p>领取大额外卖红包</p>
-                            </div>
-                        </a>
-                        <a href="http://vip.nshz.top/" class="item-card">
-                            <img src="https://s1.imagehub.cc/images/2026/03/31/b894dd18ef5c34952a2dfdf1f714f9a8.png" alt="影视会员图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>影视会员</h4>
-                                <p>解锁各大平台会员</p>
-                            </div>
-                        </a>
-                        <a href="https://172.lot-ml.com/ProductEn/Index/8ec8f5a378fb2bc0" class="item-card">
-                            <img src="https://s1.imagehub.cc/images/2025/03/29/cd7763ebcf725f3e31cb1fc0c7e6f42a.png" alt="流量卡图片" class="item-icon">
-                            <div class="item-info">
-                                <h4>超大流量卡</h4>
-                                <p>微信1319312595</p>
-                            </div>
-                        </a>
-                        <a href="" class="item-card">
-                            <img src="https://s1.imagehub.cc/images/2026/03/31/168a29dd044e53e0f22380e9fb2d47e2.png" alt="广告位1" class="item-icon">
-                            <div class="item-info">
-                                <h4>广告位招租2</h4>
-                                <p>微信1319312595</p>
-                            </div>
-                        </a>
-                        <a href="" class="item-card">
-                            <img src="https://s1.imagehub.cc/images/2026/03/31/168a29dd044e53e0f22380e9fb2d47e2.png" alt="广告位1" class="item-icon">
-                            <div class="item-info">
-                                <h4>广告位招租3</h4>
-                                <p>微信1319312595</p>
-                            </div>
-                        </a>
+                    <!-- 为item-grid新增一个容器 -->
+                    <div class="item-grid-container">
+                        <div class="item-grid">
+                            <a href="https://ycivn.yhzu.cn/" class="item-card">
+                                <img src="https://s1.imagehub.cc/images/2026/03/31/93492a1425bd8381a4b6d106bd04e971.png" alt="淘京拼图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>淘京拼优惠券</h4>
+                                    <p>查询全网隐藏优惠券</p>
+                                </div>
+                            </a>
+                            <a href="http://free2h5.lmmyx.com/h5s/blank?promoterId=d5ubs8FvTkSX&itemType=pddWelfare" class="item-card">
+                                <img src="https://s1.imagehub.cc/images/2026/03/31/f3ed381d8878b6a8c6928de6da0c83ea.png" alt="拼多多图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>0元购</h4>
+                                    <p>拼多多免费拿好物</p>
+                                </div>
+                            </a>
+                            <a href="https://kzurl15.cn/t3ZYBn" class="item-card">
+                                <img src="https://s1.imagehub.cc/images/2026/03/31/85178c6029722ec30ca79610afefc687.png" alt="外卖图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>外卖霸王餐</h4>
+                                    <p>领取大额外卖红包</p>
+                                </div>
+                            </a>
+                            <a href="http://vip.nshz.top/" class="item-card">
+                                <img src="https://s1.imagehub.cc/images/2026/03/31/b894dd18ef5c34952a2dfdf1f714f9a8.png" alt="影视会员图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>影视会员</h4>
+                                    <p>解锁各大平台会员</p>
+                                </div>
+                            </a>
+                            <a href="https://172.lot-ml.com/ProductEn/Index/8ec8f5a378fb2bc0" class="item-card">
+                                <img src="https://s1.imagehub.cc/images/2025/03/29/cd7763ebcf725f3e31cb1fc0c7e6f42a.png" alt="流量卡图片" class="item-icon">
+                                <div class="item-info">
+                                    <h4>超大流量卡</h4>
+                                    <p>微信1319312595</p>
+                                </div>
+                            </a>
+                            <a href="" class="item-card">
+                                <img src="https://s1.imagehub.cc/images/2026/03/31/168a29dd044e53e0f22380e9fb2d47e2.png" alt="广告位1" class="item-icon">
+                                <div class="item-info">
+                                    <h4>广告位招租2</h4>
+                                    <p>微信1319312595</p>
+                                </div>
+                            </a>
+                            <a href="" class="item-card">
+                                <img src="https://s1.imagehub.cc/images/2026/03/31/168a29dd044e53e0f22380e9fb2d47e2.png" alt="广告位1" class="item-icon">
+                                <div class="item-info">
+                                    <h4>广告位招租3</h4>
+                                    <p>微信1319312595</p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Tab 2: 娱乐视频 (二级菜单) - 使用图片图标 -->
                 <div id="nav-entertainment" class="tab-content">
-                    <div class="item-grid">
-                        <a href="https://www.bilibili.com" class="item-card">
-                            <img src="https://your-image-bed.com/path/to/bilibili.png" alt="B站图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>哔哩哔哩 (B站)</h4>
-                                <p>年轻人的学习网站</p>
-                            </div>
-                        </a>
-                        <a href="https://www.douyin.com" class="item-card">
-                            <img src="https://your-image-bed.com/path/to/douyin.png" alt="抖音图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>抖音短视频</h4>
-                                <p>记录美好生活</p>
-                            </div>
-                        </a>
-                        <a href="https://www.youtube.com" class="item-card">
-                            <img src="https://your-image-bed.com/path/to/youtube.png" alt="YouTube图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>YouTube</h4>
-                                <p>全球最大的视频分享平台</p>
-                            </div>
-                        </a>
+                    <div class="item-grid-container">
+                        <div class="item-grid">
+                            <a href="https://www.bilibili.com" class="item-card">
+                                <img src="https://your-image-bed.com/path/to/bilibili.png" alt="B站图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>哔哩哔哩 (B站)</h4>
+                                    <p>年轻人的学习网站</p>
+                                </div>
+                            </a>
+                            <a href="https://www.douyin.com" class="item-card">
+                                <img src="https://your-image-bed.com/path/to/douyin.png" alt="抖音图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>抖音短视频</h4>
+                                    <p>记录美好生活</p>
+                                </div>
+                            </a>
+                            <a href="https://www.youtube.com" class="item-card">
+                                <img src="https://your-image-bed.com/path/to/youtube.png" alt="YouTube图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>YouTube</h4>
+                                    <p>全球最大的视频分享平台</p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Tab 3: 程序员 (二级菜单) - 使用图片图标 -->
                 <div id="nav-dev" class="tab-content">
-                    <div class="item-grid">
-                        <a href="https://github.com" class="item-card">
-                            <img src="https://your-image-bed.com/path/to/github.png" alt="GitHub图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>GitHub</h4>
-                                <p>全球最大的开发者社区</p>
-                            </div>
-                        </a>
-                        <a href="https://stackoverflow.com" class="item-card">
-                            <img src="https://your-image-bed.com/path/to/stackoverflow.png" alt="Stack Overflow图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>Stack Overflow</h4>
-                                <p>程序员问答网站</p>
-                            </div>
-                        </a>
-                        <a href="https://v2ex.com" class="item-card">
-                            <img src="https://your-image-bed.com/path/to/v2ex.png" alt="V2EX图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>V2EX</h4>
-                                <p>创意工作者们的社区</p>
-                            </div>
-                        </a>
+                    <div class="item-grid-container">
+                        <div class="item-grid">
+                            <a href="https://github.com" class="item-card">
+                                <img src="https://your-image-bed.com/path/to/github.png" alt="GitHub图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>GitHub</h4>
+                                    <p>全球最大的开发者社区</p>
+                                </div>
+                            </a>
+                            <a href="https://stackoverflow.com" class="item-card">
+                                <img src="https://your-image-bed.com/path/to/stackoverflow.png" alt="Stack Overflow图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>Stack Overflow</h4>
+                                    <p>程序员问答网站</p>
+                                </div>
+                            </a>
+                            <a href="https://v2ex.com" class="item-card">
+                                <img src="https://your-image-bed.com/path/to/v2ex.png" alt="V2EX图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>V2EX</h4>
+                                    <p>创意工作者们的社区</p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Tab 4: 常用服务 (二级菜单) - 使用图片图标 -->
                 <div id="nav-services" class="tab-content">
-                    <div class="item-grid">
-                        <a href="https://mail.qq.com" class="item-card">
-                            <img src="https://your-image-bed.com/path/to/qqmail.png" alt="QQ邮箱图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>QQ邮箱</h4>
-                                <p>腾讯官方邮箱</p>
-                            </div>
-                        </a>
-                        <a href="https://www.zhihu.com" class="item-card">
-                            <img src="https://your-image-bed.com/path/to/zhihu.png" alt="知乎图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>知乎</h4>
-                                <p>有问题就会有答案</p>
-                            </div>
-                        </a>
-                        <a href="https://fanyi.baidu.com" class="item-card">
-                            <img src="https://your-image-bed.com/path/to/baidufanyi.png" alt="百度翻译图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>百度翻译</h4>
-                                <p>多语言在线翻译</p>
-                            </div>
-                        </a>
+                    <div class="item-grid-container">
+                        <div class="item-grid">
+                            <a href="https://mail.qq.com" class="item-card">
+                                <img src="https://your-image-bed.com/path/to/qqmail.png" alt="QQ邮箱图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>QQ邮箱</h4>
+                                    <p>腾讯官方邮箱</p>
+                                </div>
+                            </a>
+                            <a href="https://www.zhihu.com" class="item-card">
+                                <img src="https://your-image-bed.com/path/to/zhihu.png" alt="知乎图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>知乎</h4>
+                                    <p>有问题就会有答案</p>
+                                </div>
+                            </a>
+                            <a href="https://fanyi.baidu.com" class="item-card">
+                                <img src="https://your-image-bed.com/path/to/baidufanyi.png" alt="百度翻译图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>百度翻译</h4>
+                                    <p>多语言在线翻译</p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Tab 5: 实用工具 (保持原有布局) -->
                 <div id="tools" class="tab-content">
-                    <h2 style="margin-bottom: 20px;">日常实用工具</h2>
-                    <div class="item-grid">
-                        <a href="https://fanyi.baidu.com" class="item-card">
-                            <img src="https://your-image-bed.com/path/to/baidufanyi.png" alt="百度翻译图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>百度翻译</h4>
-                                <p>多语言在线翻译</p>
-                            </div>
-                        </a>
-                        <a href="https://www.aconvert.com/cn/" class="item-card">
-                            <img src="https://your-image-bed.com/path/to/convert.png" alt="格式转换图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>格式转换</h4>
-                                <p>PDF、图片、文档格式互转</p>
-                            </div>
-                        </a>
-                        <a href="https://tinypng.com" class="item-card">
-                            <img src="https://your-image-bed.com/path/to/tinypng.png" alt="图片压缩图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>图片压缩</h4>
-                                <p>智能压缩 PNG/JPG 图片</p>
-                            </div>
-                        </a>
-                        <a href="https://www.remove.bg/zh" class="item-card">
-                            <img src="https://your-image-bed.com/path/to/removebg.png" alt="一键抠图图标" class="item-icon">
-                            <div class="item-info">
-                                <h4>一键抠图</h4>
-                                <p>AI 自动去除图片背景</p>
-                            </div>
-                        </a>
+                    <h2 style="margin-bottom: 20px; flex-shrink: 0;">日常实用工具</h2>
+                    <div class="item-grid-container">
+                        <div class="item-grid">
+                            <a href="https://fanyi.baidu.com" class="item-card">
+                                <img src="https://your-image-bed.com/path/to/baidufanyi.png" alt="百度翻译图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>百度翻译</h4>
+                                    <p>多语言在线翻译</p>
+                                </div>
+                            </a>
+                            <a href="https://www.aconvert.com/cn/" class="item-card">
+                                <img src="https://your-image-bed.com/path/to/convert.png" alt="格式转换图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>格式转换</h4>
+                                    <p>PDF、图片、文档格式互转</p>
+                                </div>
+                            </a>
+                            <a href="https://tinypng.com" class="item-card">
+                                <img src="https://your-image-bed.com/path/to/tinypng.png" alt="图片压缩图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>图片压缩</h4>
+                                    <p>智能压缩 PNG/JPG 图片</p>
+                                </div>
+                            </a>
+                            <a href="https://www.remove.bg/zh" class="item-card">
+                                <img src="https://your-image-bed.com/path/to/removebg.png" alt="一键抠图图标" class="item-icon">
+                                <div class="item-info">
+                                    <h4>一键抠图</h4>
+                                    <p>AI 自动去除图片背景</p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Tab 6: 关于本站 -->
                 <div id="about" class="tab-content">
-                    <div style="text-align: center; padding: 40px 0;">
+                    <div style="text-align: center; padding: 40px 0; display: flex; flex-direction: column; justify-content: center;">
                         <div style="font-size: 4rem; margin-bottom: 20px;">👋</div>
                         <h2>关于这个页面</h2>
                         <p style="color: var(--text-sub); margin-top: 10px; line-height: 1.6;">
