@@ -62,12 +62,12 @@
             background: transparent; 
         }
 
-        /* 顶部标题栏样式 */
+        /* 顶部标题栏样式 - 已减小 padding */
         .top-header {
             background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            padding: 25px 30px;
+            padding: 15px 20px; /* 从 25px 30px 减小 */
             border-bottom: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
@@ -76,7 +76,7 @@
         }
 
         .main-title {
-            font-size: 1.8rem;
+            font-size: 1.5rem; /* 字体也稍微调小 */
             font-weight: 700;
             color: #fff;
             text-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -86,9 +86,9 @@
         }
 
         .sub-title {
-            font-size: 0.9rem;
+            font-size: 0.8rem; /* 字体也稍微调小 */
             color: rgba(255, 255, 255, 0.9);
-            margin-top: 5px;
+            margin-top: 4px; /* 调整间距 */
             font-weight: 300;
         }
 
@@ -195,10 +195,17 @@
 
         .search-btn:hover { opacity: 0.9; }
 
-        /* 统一的工具/链接项列表样式 */
+        /* 统一的工具/链接项列表样式 - 修改网格以保证最少两列 */
         .item-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* 每列最小220px，自动填充 */
+            /* 
+                修改此行：grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+                改为：grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+                - auto-fit: 将空隙填满，使列宽可以拉伸。
+                - min(220px, 100%): 每列最小宽度为220px，但在极窄屏幕上，100%vw会更小，从而强制至少出现两列。
+                - 1fr: 表示剩余空间平均分配给各列。
+            */
+            grid-template-columns: repeat(auto-fit, minmax(min(220px, calc((100% - 15px) / 2)), 1fr));
             gap: 15px;
         }
         
@@ -240,6 +247,9 @@
             <!-- Tab 切换按钮 (作为一级菜单) - 现在会自动换行 -->
             <nav class="tabs-header">
                 <button class="tab-btn active" onclick="openTab(event, 'nav-shopping')">🛍️ 购物优惠</button>
+                <button class="tab-btn" onclick="openTab(event, 'nav-entertainment')">📺 娱乐视频</button>
+                <button class="tab-btn" onclick="openTab(event, 'nav-dev')">💻 程序员</button>
+                <button class="tab-btn" onclick="openTab(event, 'nav-services')">📧 常用服务</button>
                 <button class="tab-btn" onclick="openTab(event, 'tools')">🧰 实用工具</button>
                 <button class="tab-btn" onclick="openTab(event, 'about')">ℹ️ 关于</button>
             </nav>
