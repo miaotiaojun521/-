@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -271,6 +273,57 @@
             border-top: 1px solid var(--border-color);
             background: var(--card-bg);
         }
+/* --- 霸王餐弹窗样式 --- */
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+.popup-content {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 85%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+.popup-img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    border: 3px solid #007bff;
+    border-radius: 12px;
+    margin: 10px auto;
+}
+.popup-text {
+    color: #333;
+    margin: 15px 0 0;
+    font-size: 1rem;
+    line-height: 1.6;
+}
     </style>
 </head>
 <body>
@@ -315,13 +368,14 @@
                                     <p>每人每天12单</p>
                                 </div>
                             </a>
-                            <a href="https://kzurl15.cn/t3ZYBn" class="item-card">
-                                <img src="https://s1.imagehub.cc/images/2026/03/31/85178c6029722ec30ca79610afefc687.png" alt="外卖图标" class="item-icon">
-                                <div class="item-info">
-                                    <h4>外卖霸王餐</h4>
-                                    <p>5元左右吃外卖</p>
-                                </div>
-                            </a>
+<!-- 外卖霸王餐 (点击弹窗版) -->
+<a href="javascript:void(0);" class="item-card" onclick="showPopup()">
+    <img src="https://s1.imagehub.cc/images/2026/03/31/85178c6029722ec30ca79610afefc687.png" alt="外卖图标" class="item-icon">
+    <div class="item-info">
+        <h4>外卖霸王餐</h4>
+        <p>点击看图领取</p>
+    </div>
+</a>
                             <a href="https://kzurl05.cn/t3I3IM" class="item-card">
                                 <img src="https://s1.imagehub.cc/images/2026/03/31/36ba9a5bb5ccf2e96dd1172b0f788705.png" alt="外卖红包" class="item-icon">
                                 <div class="item-info">
@@ -561,6 +615,34 @@
             }
         }
     </script>
+<!-- 霸王餐弹窗结构 -->
+<div class="popup-overlay" id="mealPopup">
+    <div class="popup-content">
+        <button class="popup-close" onclick="closePopup()">&times;</button>
+        <img src="https://s1.imagehub.cc/images/2026/04/01/59ae5357d67ce601e3517d7046b39fb5.jpeg" alt="活动海报" class="popup-img" id="popupImage">
+        <div class="popup-text">
+            <p>🎉 恭喜发现隐藏福利！</p>
+            <p>请长按上方图片保存</p>
+            <p>打开微信扫一扫相册二维码</p>
+            <p>即可点餐！</p>
+        </div>
+    </div>
+</div>
 
+<script>
+// 弹窗控制函数
+function showPopup() {
+    document.getElementById('mealPopup').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+function closePopup() {
+    document.getElementById('mealPopup').style.display = 'none';
+    document.body.style.overflow = '';
+}
+// 点击背景关闭
+document.getElementById('mealPopup')?.addEventListener('click', function(e) {
+    if (e.target === this) closePopup();
+});
+</script>
 </body>
 </html>
